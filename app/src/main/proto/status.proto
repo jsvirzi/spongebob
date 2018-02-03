@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package dataAcquisition;
+
+message OperationStatus {
+  uint64 timestamp = 1;
+  float gps_lat = 2;
+  float gps_lon = 3;
+  float ins_lat = 4;
+  float ins_lon = 5;
+  string run_name = 6;
+  string receiver_status = 7;
+  string gps_status = 8;
+  string ins_status = 9;
+  string time_status = 10;
+  string pos_status = 11;
+  uint32 ext_status = 12;
+  bytes status_array = 13;
+  float lat_sigma = 14;
+  float lon_sigma = 15;
+  uint32 lidar_count = 16;
+  uint32 image_count = 17;
+  uint32 gps_count = 18;
+  uint32 imu_count = 19;
+  uint32 total_pb = 20;
+  uint32 full_pb = 21;
+  uint32 late_pb = 22;
+  uint32 duplicate_pb = 23;
+  uint32 out_of_time_pb = 24;
+  float hdop = 25;
+  string thea_state = 26;
+}
