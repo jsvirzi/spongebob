@@ -22,114 +22,156 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="50sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
-                android:text="FULL EVENTS"
+                android:layout_height="25sp"
+                android:text="EVENT STATS"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
+                android:id="@+id/totalevents"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="FULL"
+                />
+
+            <TextView
+                android:layout_width="150sp"
+                android:layout_height="25sp"
                 android:id="@+id/fullevents"
                 />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
+                android:text="MISSED"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:id="@+id/missevents"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="300sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
                 android:text="IMAGE EVENTS"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/imageevents"
                 />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:text="LIDAR EVENTS"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/lidarevents"
                 />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:text="GPS EVENTS"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/gpsevents"
                 />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:text="IMU EVENTS"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/imuevents"
                 />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_width="300sp"
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:text="GPS POSITION"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
+                android:id="@+id/gpsstat"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
                 android:id="@+id/gpslat"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/gpslon"
                 />
 
@@ -137,24 +179,102 @@
 
         <LinearLayout
             android:layout_width="200sp"
-            android:layout_height="40sp">
+            android:layout_height="25sp">
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:text="INS POSITION"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
+                android:id="@+id/insstat"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
                 android:id="@+id/inslat"
                 />
 
             <TextView
                 android:layout_width="100sp"
-                android:layout_height="40sp"
+                android:layout_height="25sp"
                 android:id="@+id/inslon"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="POS STATUS"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:id="@+id/posstat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="EXT STATUS"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:id="@+id/extstat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="RCV STATUS"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:id="@+id/rcvstat"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="200sp"
+            android:layout_height="25sp">
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="TIME STATUS"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:id="@+id/timestat"
                 />
 
         </LinearLayout>
