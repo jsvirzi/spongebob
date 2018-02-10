@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="mam.lambo.squarepants.MainActivity">
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Hello World!"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="400sp"
+            android:layout_height="500sp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="EVENT STATS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/totalevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="FULL"
+                    />
+
+                <TextView
+                    android:layout_width="150sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/fullevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="MISSED"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/missevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="IMAGE EVENTS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/imageevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="LIDAR EVENTS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/lidarevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="GPS EVENTS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/gpsevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="IMU EVENTS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/imuevents"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="GPS POSITION"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/gpsstat"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/gpslat"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/gpslon"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="INS POSITION"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/insstat"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/inslat"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/inslon"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="POS STATUS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/posstat"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="EXT STATUS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/extstat"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="RCV STATUS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/rcvstat"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="25sp">
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:text="TIME STATUS"
+                    />
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="25sp"
+                    android:id="@+id/timestat"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="40sp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/exitthea"
+                    android:text="EXIT THEA"
+                    />
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/syspower"
+                    android:text="SYS"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="40sp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/gpspower"
+                    android:text="GPS"
+                    />
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/camerapower"
+                    android:text="CAMERA"
+                    />
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/lidarpower"
+                    android:text="LIDAR"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="500sp"
+            android:layout_height="500sp"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/simpleProgressBar"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                />
+
+            <TextView
+                android:layout_width="100sp"
+                android:layout_height="25sp"
+                android:text="Uncertainties"
+                />
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="100sp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="200sp"
+                    android:layout_height="50sp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100sp"
+                        android:layout_height="50sp"
+                        android:text="LON"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/sigmaLonFine"
+                        android:layout_width="175sp"
+                        android:layout_height="50sp"
+                        android:max="20"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="200sp"
+                    android:layout_height="50sp"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="100sp"
+                        android:layout_height="50sp"
+                        android:text="LON"
+                        />
+
+                    <ProgressBar
+                        android:id="@+id/sigmaLonCoarse"
+                        android:layout_width="175sp"
+                        android:layout_height="50sp"
+                        android:max="300"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="200sp"
+                android:layout_height="100sp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="100sp"
+                    android:layout_height="50sp"
+                    android:text="LAT"
+                    />
+
+                <ProgressBar
+                    android:id="@+id/sigmaLatFine"
+                    android:layout_width="175sp"
+                    android:layout_height="50sp"
+                    android:max="20"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+                <ProgressBar
+                    android:id="@+id/sigmaLatCoarse"
+                    android:layout_width="175sp"
+                    android:layout_height="50sp"
+                    android:max="300"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="300sp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="120sp"
+                    android:layout_height="30sp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="50sp"
+                        android:layout_height="30sp"
+                        android:text="INS"
+                        android:id="@+id/dispInsStatus"
+                        />
+
+                    <Button
+                        android:layout_width="50sp"
+                        android:layout_height="30sp"
+                        android:text="ALN"
+                        android:id="@+id/dispAlnStatus"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="120sp"
+                    android:layout_height="60sp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="120sp"
+                        android:layout_height="30sp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="50sp"
+                            android:layout_height="30sp"
+                            android:text="SAT"
+                            android:id="@+id/dispNumberSatellites1"
+                            />
+
+                        <Button
+                            android:layout_width="50sp"
+                            android:layout_height="30sp"
+                            android:text="POS"
+                            android:id="@+id/dispPosStatus1"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="120sp"
+                        android:layout_height="30sp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:layout_width="50sp"
+                            android:layout_height="30sp"
+                            android:text="SAT"
+                            android:id="@+id/dispNumberSatellites2"
+                            />
+
+                        <Button
+                            android:layout_width="50sp"
+                            android:layout_height="30sp"
+                            android:text="POS"
+                            android:id="@+id/dispPosStatus2"
+                            />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

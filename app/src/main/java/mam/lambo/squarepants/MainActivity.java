@@ -1,9 +1,17 @@
 package mam.lambo.squarepants;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
@@ -36,15 +44,43 @@ public class MainActivity extends AppCompatActivity {
     Timer timer;
     HeartBeat heartBeat;
 
-    long lastlidarEventCount;
-    long lastImageEventCount;
-    long lastGpsEventCount;
-    long lastImuEventCount;
+    long lastlidarEventCount = 0;
+    long lastImageEventCount = 0;
+    long lastGpsEventCount = 0;
+    long lastImuEventCount = 0;
 
-    long lidarEventCount;
-    long imageEventCount;
-    long gpsEventCount;
-    long imuEventCount;
+    long lidarEventCount = 0;
+    long imageEventCount = 0;
+    long gpsEventCount = 0;
+    long imuEventCount = 0;
+
+    boolean blinkingIns = false;
+    boolean blinkingAln = false;
+    boolean blinkingSat1 = false;
+    boolean blinkingSat2 = false;
+    boolean blinkingPos1 = false;
+    boolean blinkingPos2 = false;
+
+    boolean prevBlinkingIns = false;
+    boolean prevBlinkingAln = false;
+    boolean prevBlinkingSat1 = false;
+    boolean prevBlinkingSat2 = false;
+    boolean prevBlinkingPos1 = false;
+    boolean prevBlinkingPos2 = false;
+
+    int colorIns = Color.GRAY;
+    int colorAln = Color.GRAY;
+    int colorSat1 = Color.GRAY;
+    int colorSat2 = Color.GRAY;
+    int colorPos1 = Color.GRAY;
+    int colorPos2 = Color.GRAY;
+
+    ObjectAnimator blinkerIns;
+    ObjectAnimator blinkerAln;
+    ObjectAnimator blinkerSat1;
+    ObjectAnimator blinkerSat2;
+    ObjectAnimator blinkerPos1;
+    ObjectAnimator blinkerPos2;
 
     String runName;
     String posStatus;
@@ -52,10 +88,10 @@ public class MainActivity extends AppCompatActivity {
     String gpsStatus;
     String rcvStatus;
     String timeStatus;
-    int extStatus;
-    int totalEvents;
-    int fullEvents;
-    int lateEvents;
+    int extStatus = 0;
+    int totalEvents = 0;
+    int fullEvents = 0;
+    int lateEvents = 0;
 
     final long kExpectedEvents = 20;
     final long kMininumEvents = kExpectedEvents / 2;
@@ -74,7 +110,21 @@ public class MainActivity extends AppCompatActivity {
     TextView textViewRcvStatus;
     TextView textViewTimeStatus;
 
+    ProgressBar progressBarSigmaLatFine;
+    ProgressBar progressBarSigmaLonFine;
+    ProgressBar progressBarSigmaLatCoarse;
+    ProgressBar progressBarSigmaLonCoarse;
+
+    Button buttonExitThea;
+    Button buttonIns;
+    Button buttonAln;
+    Button buttonSat1;
+    Button buttonSat2;
+    Button buttonPos1;
+    Button buttonPos2;
+
     Handler handler;
+    HandlerThread thread;
 
     HttpClient httpClient;
     HttpPost httpPost;
@@ -83,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        progressBarSigmaLatFine = (ProgressBar) findViewById(R.id.sigmaLatFine);
+        progressBarSigmaLonFine = (ProgressBar) findViewById(R.id.sigmaLonFine);
+        progressBarSigmaLatCoarse = (ProgressBar) findViewById(R.id.sigmaLatCoarse);
+        progressBarSigmaLonCoarse = (ProgressBar) findViewById(R.id.sigmaLonCoarse);
 
         textViewLidarEventCount = (TextView) findViewById(R.id.lidarevents);
         textViewImageEventCount = (TextView) findViewById(R.id.imageevents);
@@ -98,7 +155,39 @@ public class MainActivity extends AppCompatActivity {
         textViewRcvStatus = (TextView) findViewById(R.id.rcvstat);
         textViewTimeStatus = (TextView) findViewById(R.id.timestat);
 
-        handler = new Handler();
+        buttonExitThea = (Button) findViewById(R.id.exitthea);
+
+        buttonIns = (Button) findViewById(R.id.dispInsStatus);
+        buttonAln = (Button) findViewById(R.id.dispAlnStatus);
+        buttonSat1 = (Button) findViewById(R.id.dispNumberSatellites1);
+        buttonSat2 = (Button) findViewById(R.id.dispNumberSatellites2);
+        buttonPos1 = (Button) findViewById(R.id.dispPosStatus1);
+        buttonPos2 = (Button) findViewById(R.id.dispPosStatus2);
+
+        thread = new HandlerThread("worker");
+        thread.start();
+        handler = new Handler(thread.getLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    if ((prevBlinkingIns == false) && (blinkingIns == true)) {
+                        blinkerIns.start();
+                    } else if ((prevBlinkingIns == true) && (blinkingIns == true)) {
+                        blinkerIns.end();
+                    }
+                    prevBlinkingIns = blinkingIns;
+                }
+            }
+        };
+        handler.post(runnable);
+
+        buttonExitThea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blinkingIns = !blinkingIns;
+            }
+        });
 
         setup();
     }
@@ -116,18 +205,36 @@ public class MainActivity extends AppCompatActivity {
 
     void setup() {
 
+        blinkerIns = ObjectAnimator.ofInt(buttonExitThea, "textColor", Color.YELLOW, Color.TRANSPARENT);
+        blinkerIns.setDuration(500); //duration of flash
+        blinkerIns.setEvaluator(new ArgbEvaluator());
+        blinkerIns.setRepeatCount(ValueAnimator.INFINITE);
+        blinkerIns.setRepeatMode(ValueAnimator.REVERSE);
+
         initializeCounters();
+
+        progressBarSigmaLatFine.setProgress(10);
+        progressBarSigmaLatCoarse.setProgress(100);
+
+        progressBarSigmaLonFine.setProgress(10);
+        progressBarSigmaLonCoarse.setProgress(100);
 
         httpClient = new DefaultHttpClient();
         httpPost = new HttpPost("http://192.168.2.200:8086/status");
 
+        /* this must be last item as it uses all resources */
         heartBeat = new HeartBeat();
         timer = new Timer("HeartBeatTimer");
         timer.schedule(heartBeat, 1000, 1000);
+
     }
 
     private class HeartBeat extends TimerTask {
         public void run() {
+
+            if (true) {
+                return;
+            }
 
             Status.OperationStatus operationStatus = null;
             if (true) {
