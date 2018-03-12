@@ -10,6 +10,9 @@ import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     long imageEventCount = 0;
     long gpsEventCount = 0;
     long imuEventCount = 0;
+
+    boolean displayThea = false;
 
     boolean blinkingIns = false;
     boolean blinkingAln = false;
@@ -115,7 +120,11 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBarSigmaLatCoarse;
     ProgressBar progressBarSigmaLonCoarse;
 
+    Button buttonLaunchThea;
+    Button buttonDisplayThea;
     Button buttonExitThea;
+    Button buttonLaunchSquidward;
+    Button buttonExitSquidward;
     Button buttonIns;
     Button buttonAln;
     Button buttonSat1;
@@ -155,8 +164,6 @@ public class MainActivity extends AppCompatActivity {
         textViewRcvStatus = (TextView) findViewById(R.id.rcvstat);
         textViewTimeStatus = (TextView) findViewById(R.id.timestat);
 
-        buttonExitThea = (Button) findViewById(R.id.exitthea);
-
         buttonIns = (Button) findViewById(R.id.dispInsStatus);
         buttonAln = (Button) findViewById(R.id.dispAlnStatus);
         buttonSat1 = (Button) findViewById(R.id.dispNumberSatellites1);
@@ -170,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+
                 while (true) {
                     if ((prevBlinkingIns == false) && (blinkingIns == true)) {
                         blinkerIns.start();
@@ -180,41 +188,99 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        handler.post(runnable);
+//        handler.post(runnable);
 
-        buttonExitThea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                blinkingIns = !blinkingIns;
-            }
-        });
+//        runOnUiThread(runnable);
 
-        setup();
-    }
-
-    void initializeCounters() {
-        lastlidarEventCount = 0;
-        lastImageEventCount = 0;
-        lastGpsEventCount = 0;
-        lastImuEventCount = 0;
-        lidarEventCount = 0;
-        imageEventCount = 0;
-        gpsEventCount = 0;
-        imuEventCount = 0;
-    }
-
-    void setup() {
-
-        blinkerIns = ObjectAnimator.ofInt(buttonExitThea, "textColor", Color.YELLOW, Color.TRANSPARENT);
+        blinkerIns = ObjectAnimator.ofInt(buttonIns, "textColor", Color.BLACK, Color.TRANSPARENT);
+        buttonIns.setBackgroundColor(Color.GREEN);
         blinkerIns.setDuration(500); //duration of flash
         blinkerIns.setEvaluator(new ArgbEvaluator());
         blinkerIns.setRepeatCount(ValueAnimator.INFINITE);
         blinkerIns.setRepeatMode(ValueAnimator.REVERSE);
+        blinkerIns.start();
 
-        initializeCounters();
+        buttonAln.setBackgroundColor(Color.GREEN);
+        Animation mAnimation = new AlphaAnimation(1, 0);
+        mAnimation.setDuration(200);
+        mAnimation.setInterpolator(new LinearInterpolator());
+        mAnimation.setRepeatCount(Animation.INFINITE);
+        mAnimation.setRepeatMode(Animation.REVERSE);
+        buttonAln.startAnimation(mAnimation);
 
-        progressBarSigmaLatFine.setProgress(10);
-        progressBarSigmaLatCoarse.setProgress(100);
+        buttonLaunchThea = (Button) findViewById(R.id.launchthea);
+        buttonLaunchThea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        // HttpPost httpPost = new HttpPost("http://192.168.2.200:8087/launchthea"); /* goes to rocket launcher */
+                        HttpPost httpPost = new HttpPost("http://192.168.2.200:8087/command?launch=thea"); /* goes to rocket launcher */
+                        // HttpPost httpPost = new HttpPost("192.168.2.200:8087/command?launch=thea"); /* goes to rocket launcher */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
+
+        buttonDisplayThea = (Button) findViewById(R.id.displaythea);
+        buttonDisplayThea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayThea = !displayThea;
+                if (displayThea) {
+                    buttonDisplayThea.setText("MUTE");
+                } else {
+                    buttonDisplayThea.setText("DISPLAY");
+                }
+            }
+        });
+
+        buttonExitThea = (Button) findViewById(R.id.exitthea);
+        buttonExitThea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        HttpPost httpPost = new HttpPost("http://192.168.2.200:8086/command?action=terminate"); /* goes directly to thea */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+//                        operationStatus = Status.OperationStatus.parseFrom(inputStream);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+//                    if (response != null) {
+//                        try {
+//                            response.();
+//                        } catch (IOException ex) {
+//                        }
+//                    }
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
 
         progressBarSigmaLonFine.setProgress(10);
         progressBarSigmaLonCoarse.setProgress(100);
@@ -226,17 +292,18 @@ public class MainActivity extends AppCompatActivity {
         heartBeat = new HeartBeat();
         timer = new Timer("HeartBeatTimer");
         timer.schedule(heartBeat, 1000, 1000);
-
     }
 
     private class HeartBeat extends TimerTask {
         public void run() {
 
-            if (true) {
-                return;
-            }
+            if (displayThea == false) { return; }
 
             Status.OperationStatus operationStatus = null;
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://192.168.2.200:8086/status");
+
             if (true) {
                 // CloseableHttpClient httpClient = HttpClients.createDefault();
 

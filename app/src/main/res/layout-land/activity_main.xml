@@ -291,27 +291,6 @@
                 <Button
                     android:layout_width="100sp"
                     android:layout_height="40sp"
-                    android:id="@+id/exitthea"
-                    android:text="EXIT THEA"
-                    />
-
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/syspower"
-                    android:text="SYS"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="300sp"
-                android:layout_height="40sp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
                     android:id="@+id/gpspower"
                     android:text="GPS"
                     />
@@ -328,6 +307,55 @@
                     android:layout_height="40sp"
                     android:id="@+id/lidarpower"
                     android:text="LIDAR"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="400sp"
+                android:layout_height="40sp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="150sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/launchthea"
+                    android:text="LAUNCH THEA"
+                    />
+
+                <Button
+                    android:layout_width="100sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/displaythea"
+                    android:text="DISPLAY"
+                    />
+
+                <Button
+                    android:layout_width="150sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/exitthea"
+                    android:text="EXIT THEA"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="300sp"
+                android:layout_height="40sp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="150sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/launchsquidward"
+                    android:text="LAUNCH SW"
+                    />
+
+                <Button
+                    android:layout_width="150sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/exitsquidward"
+                    android:text="EXIT SW"
                     />
 
             </LinearLayout>
