@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
@@ -103,16 +106,25 @@ public class MainActivity extends AppCompatActivity {
 
     TextView textViewImageEventCount;
     TextView textViewLidarEventCount;
+    TextView textViewTextLidarEventCount;
     TextView textViewGpsEventCount;
     TextView textViewImuEventCount;
     TextView textViewTotalEvents;
     TextView textViewFullEvents;
     TextView textViewMissedEvents;
     TextView textViewPosStatus;
+    TextView textViewTextPosStatus;
     TextView textViewGpsStatus;
+    TextView textViewGpsLat;
+    TextView textViewGpsLon;
     TextView textViewInsStatus;
+    TextView textViewInsLat;
+    TextView textViewInsLon;
+    TextView textViewTextInsStatus;
+    TextView textViewTextExtStatus;
     TextView textViewExtStatus;
     TextView textViewRcvStatus;
+    TextView textViewTextRcvStatus;
     TextView textViewTimeStatus;
 
     ProgressBar progressBarSigmaLatFine;
@@ -132,11 +144,26 @@ public class MainActivity extends AppCompatActivity {
     Button buttonPos1;
     Button buttonPos2;
 
+    Button buttonConnect;
+    boolean connected = false;
+
+    RadioGroup radioGroupHardware;
+    RadioButton radioButtonGroundTruth;
+    RadioButton radioButtonSensorBoard;
+    final int HardwareGroundTruth = 0;
+    final int HardwareSensorBoard = 1;
+    int hardwareSelect = HardwareGroundTruth;
+
     Handler handler;
     HandlerThread thread;
 
     HttpClient httpClient;
     HttpPost httpPost;
+
+    String theaIpAddress = "192.168.2.200";
+    int theaPort = 8086;
+    String rocketLauncherIpAddress = "192.168.2.200";
+    int rocketLauncherPort = 8087;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         progressBarSigmaLonCoarse = (ProgressBar) findViewById(R.id.sigmaLonCoarse);
 
         textViewLidarEventCount = (TextView) findViewById(R.id.lidarevents);
+        textViewTextLidarEventCount = (TextView) findViewById(R.id.textlidarevents);
         textViewImageEventCount = (TextView) findViewById(R.id.imageevents);
         textViewGpsEventCount = (TextView) findViewById(R.id.gpsevents);
         textViewImuEventCount = (TextView) findViewById(R.id.imuevents);
@@ -158,10 +186,18 @@ public class MainActivity extends AppCompatActivity {
         textViewMissedEvents = (TextView) findViewById(R.id.missevents);
         textViewTotalEvents = (TextView) findViewById(R.id.totalevents);
         textViewPosStatus = (TextView) findViewById(R.id.posstat);
+        textViewTextPosStatus = (TextView) findViewById(R.id.textposstat);
         textViewGpsStatus = (TextView) findViewById(R.id.gpsstat);
+        textViewGpsLat = (TextView) findViewById(R.id.gpslat);
+        textViewGpsLon = (TextView) findViewById(R.id.gpslon);
         textViewInsStatus = (TextView) findViewById(R.id.insstat);
+        textViewInsLat = (TextView) findViewById(R.id.inslat);
+        textViewInsLon = (TextView) findViewById(R.id.inslon);
+        textViewTextInsStatus = (TextView) findViewById(R.id.textinsstat);
         textViewExtStatus = (TextView) findViewById(R.id.extstat);
+        textViewTextExtStatus = (TextView) findViewById(R.id.textextstat);
         textViewRcvStatus = (TextView) findViewById(R.id.rcvstat);
+        textViewTextRcvStatus = (TextView) findViewById(R.id.textrcvstat);
         textViewTimeStatus = (TextView) findViewById(R.id.timestat);
 
         buttonIns = (Button) findViewById(R.id.dispInsStatus);
@@ -170,6 +206,73 @@ public class MainActivity extends AppCompatActivity {
         buttonSat2 = (Button) findViewById(R.id.dispNumberSatellites2);
         buttonPos1 = (Button) findViewById(R.id.dispPosStatus1);
         buttonPos2 = (Button) findViewById(R.id.dispPosStatus2);
+
+        radioGroupHardware = (RadioGroup) findViewById(R.id.hardware);
+        radioGroupHardware.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.groundtruth) {
+                    setupGroundTruth();
+                } else if (checkedId == R.id.sensorboard) {
+                    setupSensorBoard();
+                }
+            }
+        });
+
+
+        radioButtonGroundTruth = (RadioButton) findViewById(R.id.groundtruth);
+        radioButtonSensorBoard = (RadioButton) findViewById(R.id.sensorboard);
+
+        buttonConnect = (Button) findViewById(R.id.connect);
+        buttonConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        String url = String.format("http://%s:%d/status?state=self", rocketLauncherIpAddress, rocketLauncherPort);
+                        HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+                                final Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        buttonConnect.setBackgroundColor(Color.GREEN);
+                                    }
+                                };
+                                MainActivity.this.runOnUiThread(runnable);
+                            }
+                        } catch (Exception e) {
+                            final Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    buttonConnect.setBackgroundColor(Color.RED);
+                                }
+                            };
+                            MainActivity.this.runOnUiThread(runnable);
+                            e.printStackTrace();
+                        } finally {
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
+
+        if (hardwareSelect == HardwareGroundTruth) {
+            radioButtonGroundTruth.setChecked(true);
+            // radioButtonSensorBoard.setChecked(false);
+        } else if (hardwareSelect == HardwareSensorBoard) {
+            radioButtonSensorBoard.setChecked(true);
+        } else { /* shouldn't be here */
+            hardwareSelect = HardwareGroundTruth;
+            radioButtonGroundTruth.setChecked(true);
+        }
 
         thread = new HandlerThread("worker");
         thread.start();
@@ -216,9 +319,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         HttpClient httpClient = new DefaultHttpClient();
-                        // HttpPost httpPost = new HttpPost("http://192.168.2.200:8087/launchthea"); /* goes to rocket launcher */
-                        HttpPost httpPost = new HttpPost("http://192.168.2.200:8087/command?launch=thea"); /* goes to rocket launcher */
-                        // HttpPost httpPost = new HttpPost("192.168.2.200:8087/command?launch=thea"); /* goes to rocket launcher */
+                        String url = String.format("http://%s:%d/command?launch=thea", rocketLauncherIpAddress, rocketLauncherPort);
+                        if (radioButtonGroundTruth.isChecked()) {
+                            url += "&hardware=groundtruth";
+                        } else if (radioButtonSensorBoard.isChecked()) {
+                            url += "&hardware=sensorboard";
+                        }
+                        HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
                         HttpResponse response = null;
                         try {
                             response = httpClient.execute(httpPost);
@@ -257,7 +364,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         HttpClient httpClient = new DefaultHttpClient();
-                        HttpPost httpPost = new HttpPost("http://192.168.2.200:8086/command?action=terminate"); /* goes directly to thea */
+                        String url = String.format("http://%s:%d/command?action=terminate", theaIpAddress, theaPort);
+                        HttpPost httpPost = new HttpPost(url); /* goes directly to thea */
                         HttpResponse response = null;
                         try {
                             response = httpClient.execute(httpPost);
@@ -292,6 +400,44 @@ public class MainActivity extends AppCompatActivity {
         heartBeat = new HeartBeat();
         timer = new Timer("HeartBeatTimer");
         timer.schedule(heartBeat, 1000, 1000);
+    }
+
+    private void setupGroundTruth() {
+        TextView textView;
+
+        textView = textViewTextExtStatus;
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextRcvStatus;
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextLidarEventCount;
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextPosStatus;
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextInsStatus;
+        textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+    }
+
+    private void setupSensorBoard() {
+        TextView textView;
+
+        textView = textViewTextExtStatus;
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextRcvStatus;
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextLidarEventCount;
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextPosStatus;
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        textView = textViewTextInsStatus;
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     private class HeartBeat extends TimerTask {
@@ -365,28 +511,43 @@ public class MainActivity extends AppCompatActivity {
             final String timeStatusString = String.format("%s", timeStatus);
 
             final int timeStatusStringColor;
-            if (timeStatus.equalsIgnoreCase("finesteering")) {
+            if ((timeStatus != null) && timeStatus.equalsIgnoreCase("finesteering")) {
                 timeStatusStringColor = Color.GREEN;
             } else {
                 timeStatusStringColor = Color.RED;
             }
 
             final int posStatusStringColor;
-            if (posStatus.equalsIgnoreCase("ins_rtkfixed")) {
-                posStatusStringColor = Color.GREEN;
+            if (hardwareSelect == HardwareGroundTruth) {
+                if ((posStatus != null) && posStatus.equalsIgnoreCase("ins_rtkfixed")) {
+                    posStatusStringColor = Color.GREEN;
+                } else {
+                    posStatusStringColor = Color.RED;
+                }
+            } else if (hardwareSelect == HardwareSensorBoard) {
+                posStatusStringColor = Color.GRAY;
             } else {
-                posStatusStringColor = Color.RED;
+                posStatusStringColor = Color.GRAY;
             }
 
             final int insStatusStringColor;
-            if (insStatus.equalsIgnoreCase("ins_solution_good")) {
-                insStatusStringColor = Color.GREEN;
+            if (hardwareSelect == HardwareGroundTruth) {
+                if ((insStatus != null) && insStatus.equalsIgnoreCase("ins_solution_good")) {
+                    insStatusStringColor = Color.GREEN;
+                } else {
+                    insStatusStringColor = Color.RED;
+                }
+            } else if (hardwareSelect == HardwareSensorBoard) {
+                insStatusStringColor = Color.GRAY;
             } else {
-                insStatusStringColor = Color.RED;
+                insStatusStringColor = Color.GRAY;
             }
 
             final String totalEventsString = String.format("%d", totalEvents);
-            double ratio = (double) fullEvents / (double) totalEvents;
+            double ratio = 0;
+            if (totalEvents != 0) {
+                ratio = (double) fullEvents / (double) totalEvents;
+            }
             final String fullEventsString = String.format("%d (%8.6f)", fullEvents, ratio);
             final String missedEventsString = String.format("%d", totalEvents - fullEvents);
 
@@ -395,12 +556,18 @@ public class MainActivity extends AppCompatActivity {
             eventCounter = lidarEventCount - lastlidarEventCount;
             lastlidarEventCount = lidarEventCount;
             final int lidarEventCountColor;
-            if (eventCounter >= (kExpectedEvents - 1)) {
-                lidarEventCountColor = Color.GREEN;
-            } else if (eventCounter > kMininumEvents) {
-                lidarEventCountColor = Color.YELLOW;
+            if (hardwareSelect == HardwareGroundTruth) {
+                if (eventCounter >= (kExpectedEvents - 1)) {
+                    lidarEventCountColor = Color.GREEN;
+                } else if (eventCounter > kMininumEvents) {
+                    lidarEventCountColor = Color.YELLOW;
+                } else {
+                    lidarEventCountColor = Color.RED;
+                }
+            } else if (hardwareSelect == HardwareSensorBoard) {
+                lidarEventCountColor = Color.GRAY;
             } else {
-                lidarEventCountColor = Color.RED;
+                lidarEventCountColor = Color.GRAY;
             }
 
             eventCounter = imageEventCount - lastImageEventCount;
@@ -436,6 +603,16 @@ public class MainActivity extends AppCompatActivity {
                 imuEventCountColor = Color.RED;
             }
 
+            final float gpsLat = operationStatus.getGpsLat();
+            final float gpsLon = operationStatus.getGpsLon();
+            final double insLat = operationStatus.getInsLat();
+            final double insLon = operationStatus.getInsLon();
+
+            final String gpsLatString = String.format("%.8f", gpsLat);
+            final String gpsLonString = String.format("%.8f", gpsLon);
+            final String insLatString = String.format("%.8f", insLat);
+            final String insLonString = String.format("%.8f", insLon);
+
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -458,9 +635,12 @@ public class MainActivity extends AppCompatActivity {
                     textViewRcvStatus.setText(rcvStatusString);
                     textViewTimeStatus.setText(timeStatusString);
                     textViewTimeStatus.setBackgroundColor(timeStatusStringColor);
+                    textViewGpsLat.setText(gpsLatString);
+                    textViewGpsLon.setText(gpsLonString);
+                    textViewInsLat.setText(insLatString);
+                    textViewInsLon.setText(insLonString);
                 }
             };
-
             MainActivity.this.runOnUiThread(runnable);
         }
     }
