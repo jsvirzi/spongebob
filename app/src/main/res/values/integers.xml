@@ -1,0 +1,23 @@
+<resources>
+    <dimen name="info_field_width">375sp</dimen>
+    <dimen name="info_field_height">35sp</dimen>
+    <dimen name="info_desc_field_width">200sp</dimen>
+    <dimen name="info_text_field_width">175sp</dimen>
+
+    <dimen name="gps_field_width">500sp</dimen>
+    <dimen name="gps_field_height">35sp</dimen>
+    <dimen name="gps_desc_field_width">125sp</dimen>
+    <dimen name="gps_status_field_width">125sp</dimen>
+    <dimen name="gps_lat_field_width">175sp</dimen>
+    <dimen name="gps_lon_field_width">175sp</dimen>
+
+    <dimen name="ins_field_width">500sp</dimen>
+    <dimen name="ins_field_height">35sp</dimen>
+    <dimen name="ins_desc_field_width">125sp</dimen>
+    <dimen name="ins_status_field_width">125sp</dimen>
+    <dimen name="ins_lat_field_width">175sp</dimen>
+    <dimen name="ins_lon_field_width">175sp</dimen>
+
+    <dimen name="text_size">20sp</dimen>
+</resources>
+
