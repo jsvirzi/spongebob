@@ -50,33 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
     boolean displayThea = false;
 
-    boolean blinkingIns = false;
-    boolean blinkingAln = false;
-    boolean blinkingSat1 = false;
-    boolean blinkingSat2 = false;
-    boolean blinkingPos1 = false;
-    boolean blinkingPos2 = false;
-
-    boolean prevBlinkingIns = false;
-    boolean prevBlinkingAln = false;
-    boolean prevBlinkingSat1 = false;
-    boolean prevBlinkingSat2 = false;
-    boolean prevBlinkingPos1 = false;
-    boolean prevBlinkingPos2 = false;
-
-    int colorIns = Color.GRAY;
-    int colorAln = Color.GRAY;
-    int colorSat1 = Color.GRAY;
-    int colorSat2 = Color.GRAY;
-    int colorPos1 = Color.GRAY;
-    int colorPos2 = Color.GRAY;
-
-    ObjectAnimator blinkerIns;
-    ObjectAnimator blinkerAln;
-    ObjectAnimator blinkerSat1;
-    ObjectAnimator blinkerSat2;
-    ObjectAnimator blinkerPos1;
-    ObjectAnimator blinkerPos2;
+//    ObjectAnimator blinkerIns;
+//    ObjectAnimator blinkerAln;
+//    ObjectAnimator blinkerSat1;
+//    ObjectAnimator blinkerSat2;
+//    ObjectAnimator blinkerPos1;
+//    ObjectAnimator blinkerPos2;
 
     String runName;
     String posStatus;
@@ -131,17 +110,37 @@ public class MainActivity extends AppCompatActivity {
 
     Button buttonExitSquidward;
 
+    final int blinkingButtonGray = Color.GRAY;
+
     Button buttonIns;
+    boolean blinkingIns = false;
+    int buttonInsColor = blinkingButtonGray;
+    int buttonInsStateColor = blinkingButtonGray;
 
     Button buttonAln;
+    boolean blinkingAln = false;
+    int buttonAlnColor = blinkingButtonGray;
+    int buttonAlnStateColor = blinkingButtonGray;
 
     Button buttonSat1;
+    boolean blinkingSat1 = false;
+    int buttonSat1Color = blinkingButtonGray;
+    int buttonSat1StateColor = blinkingButtonGray;
 
     Button buttonSat2;
+    boolean blinkingSat2 = false;
+    int buttonSat2Color = blinkingButtonGray;
+    int buttonSat2StateColor = blinkingButtonGray;
 
     Button buttonPos1;
+    boolean blinkingPos1 = false;
+    int buttonPos1Color = blinkingButtonGray;
+    int buttonPos1StateColor = blinkingButtonGray;
 
     Button buttonPos2;
+    boolean blinkingPos2 = false;
+    int buttonPos2Color = blinkingButtonGray;
+    int buttonPos2StateColor = blinkingButtonGray;
 
     Button buttonConnectThea;
     boolean connectedThea;
@@ -174,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
     boolean theaLaunched = false;
     boolean launchSquidwardRequest = false;
     boolean squidwardLaunched = false;
+
+    int timerCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -316,39 +317,39 @@ public class MainActivity extends AppCompatActivity {
         thread = new HandlerThread("worker");
         thread.start();
         handler = new Handler(thread.getLooper());
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
 
-                while (true) {
-                    if ((prevBlinkingIns == false) && (blinkingIns == true)) {
-                        blinkerIns.start();
-                    } else if ((prevBlinkingIns == true) && (blinkingIns == true)) {
-                        blinkerIns.end();
-                    }
-                    prevBlinkingIns = blinkingIns;
-                }
-            }
-        };
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    if ((prevBlinkingIns == false) && (blinkingIns == true)) {
+//                        blinkerIns.start();
+//                    } else if ((prevBlinkingIns == true) && (blinkingIns == true)) {
+//                        blinkerIns.end();
+//                    }
+//                    prevBlinkingIns = blinkingIns;
+//                }
+//            }
+//        };
 //        handler.post(runnable);
 
 //        runOnUiThread(runnable);
 
-        blinkerIns = ObjectAnimator.ofInt(buttonIns, "textColor", Color.BLACK, Color.TRANSPARENT);
-        buttonIns.setBackgroundColor(Color.GREEN);
-        blinkerIns.setDuration(500); //duration of flash
-        blinkerIns.setEvaluator(new ArgbEvaluator());
-        blinkerIns.setRepeatCount(ValueAnimator.INFINITE);
-        blinkerIns.setRepeatMode(ValueAnimator.REVERSE);
-        blinkerIns.start();
+//        blinkerIns = ObjectAnimator.ofInt(buttonIns, "textColor", Color.BLACK, Color.TRANSPARENT);
+//        buttonIns.setBackgroundColor(Color.GREEN);
+//        blinkerIns.setDuration(500); //duration of flash
+//        blinkerIns.setEvaluator(new ArgbEvaluator());
+//        blinkerIns.setRepeatCount(ValueAnimator.INFINITE);
+//        blinkerIns.setRepeatMode(ValueAnimator.REVERSE);
+//        blinkerIns.start();
 
-        buttonAln.setBackgroundColor(Color.GREEN);
-        Animation mAnimation = new AlphaAnimation(1, 0);
-        mAnimation.setDuration(200);
-        mAnimation.setInterpolator(new LinearInterpolator());
-        mAnimation.setRepeatCount(Animation.INFINITE);
-        mAnimation.setRepeatMode(Animation.REVERSE);
-        buttonAln.startAnimation(mAnimation);
+//        buttonAln.setBackgroundColor(Color.GREEN);
+//        Animation mAnimation = new AlphaAnimation(1, 0);
+//        mAnimation.setDuration(200);
+//        mAnimation.setInterpolator(new LinearInterpolator());
+//        mAnimation.setRepeatCount(Animation.INFINITE);
+//        mAnimation.setRepeatMode(Animation.REVERSE);
+//        buttonAln.startAnimation(mAnimation);
 
         buttonLaunchThea = (Button) findViewById(R.id.launchthea);
         setButtonColor(buttonLaunchThea, buttonLaunchTheaColor);
@@ -496,7 +497,7 @@ public class MainActivity extends AppCompatActivity {
         /* this must be last item as it uses all resources */
         heartBeat = new HeartBeat();
         timer = new Timer("HeartBeatTimer");
-        timer.schedule(heartBeat, 1000, 1000);
+        timer.schedule(heartBeat, 1000, 500);
     }
 
     private void setupGroundTruth() {
@@ -627,6 +628,40 @@ public class MainActivity extends AppCompatActivity {
             updateLaunchTheaRequestStatus();
 
             updateLaunchSquidwardRequestStatus();
+
+            blinkingIns = true;
+            buttonInsStateColor = Color.GREEN;
+
+            if (blinkingIns) {
+                buttonInsColor = (buttonInsColor == buttonInsStateColor) ? blinkingButtonGray : buttonInsStateColor;
+            } else {
+                buttonInsColor = buttonInsStateColor;
+            }
+
+            blinkingSat2 = true;
+            buttonSat2StateColor = Color.YELLOW;
+
+            if (blinkingIns) {
+                buttonSat2Color = (buttonSat2Color == buttonSat2StateColor) ? blinkingButtonGray : buttonSat2StateColor;
+            } else {
+                buttonInsColor = buttonSat2StateColor;
+            }
+
+            final Runnable TODORunnable = new Runnable() {
+                @Override
+                public void run() {
+                    buttonIns.setBackgroundColor(buttonInsColor);
+                    buttonAln.setBackgroundColor(buttonAlnColor);
+                    buttonSat1.setBackgroundColor(buttonSat1Color);
+                    buttonSat2.setBackgroundColor(buttonSat2Color);
+                    buttonPos1.setBackgroundColor(buttonPos1Color);
+                    buttonPos2.setBackgroundColor(buttonPos2Color);
+                }
+            };
+            MainActivity.this.runOnUiThread(TODORunnable);
+
+            ++timerCounter;
+            if ((timerCounter & 1) == 1) { return; }
 
             if (displayThea == false) { return; }
 
@@ -765,6 +800,12 @@ public class MainActivity extends AppCompatActivity {
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
+                    buttonIns.setBackgroundColor(buttonInsColor);
+                    buttonAln.setBackgroundColor(buttonAlnColor);
+                    buttonSat1.setBackgroundColor(buttonSat1Color);
+                    buttonSat2.setBackgroundColor(buttonSat2Color);
+                    buttonPos1.setBackgroundColor(buttonPos1Color);
+                    buttonPos2.setBackgroundColor(buttonPos2Color);
                     textViewLidarEventCount.setText(lidarEventCountString);
                     textViewLidarEventCount.setBackgroundColor(lidarEventCountColor);
                     textViewImageEventCount.setText(imageEventCountString);
