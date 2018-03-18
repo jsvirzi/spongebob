@@ -1,20 +1,13 @@
 package mam.lambo.squarepants;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -111,36 +104,51 @@ public class MainActivity extends AppCompatActivity {
     Button buttonExitSquidward;
 
     final int blinkingButtonGray = Color.GRAY;
+    final int blinkingButtonAmber = Color.argb(0xff, 0xff, 0xbf, 0x00);
+    final int blinkingButtonGreen = Color.GREEN;
+    final int blinkingButtonRed = Color.RED;
 
     Button buttonIns;
-    boolean blinkingIns = false;
+//    boolean blinkingIns = false;
+    int buttonInsPhase = 0;
     int buttonInsColor = blinkingButtonGray;
-    int buttonInsStateColor = blinkingButtonGray;
+    int[] buttonInsStateColor = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonInsStateColor2 = blinkingButtonGray;
 
     Button buttonAln;
-    boolean blinkingAln = false;
+//    boolean blinkingAln = false;
+    int buttonAlnPhase = 0;
     int buttonAlnColor = blinkingButtonGray;
-    int buttonAlnStateColor = blinkingButtonGray;
+    int[] buttonAlnStateColor1 = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonAlnStateColor2 = blinkingButtonGray;
 
     Button buttonSat1;
-    boolean blinkingSat1 = false;
+//    boolean blinkingSat1 = false;
+    int buttonSat1Phase = 0;
     int buttonSat1Color = blinkingButtonGray;
-    int buttonSat1StateColor = blinkingButtonGray;
+    int[] buttonSat1StateColor1 = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonSat1StateColor2 = blinkingButtonGray;
 
     Button buttonSat2;
-    boolean blinkingSat2 = false;
+//    boolean blinkingSat2 = false;
+    int buttonSat2Phase = 0;
     int buttonSat2Color = blinkingButtonGray;
-    int buttonSat2StateColor = blinkingButtonGray;
+    int[] buttonSat2StateColor1 = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonSat2StateColor2 = blinkingButtonGray;
 
     Button buttonPos1;
-    boolean blinkingPos1 = false;
+//    boolean blinkingPos1 = false;
+    int buttonPos1Phase = 0;
     int buttonPos1Color = blinkingButtonGray;
-    int buttonPos1StateColor = blinkingButtonGray;
+    int[] buttonPos1StateColor1 = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonPos1StateColor2 = blinkingButtonGray;
 
     Button buttonPos2;
-    boolean blinkingPos2 = false;
+//    boolean blinkingPos2 = false;
+    int buttonPos2Phase = 0;
     int buttonPos2Color = blinkingButtonGray;
-    int buttonPos2StateColor = blinkingButtonGray;
+    int[] buttonPos2StateColor1 = { blinkingButtonGray, blinkingButtonGray};
+//    int buttonPos2StateColor2 = blinkingButtonGray;
 
     Button buttonConnectThea;
     boolean connectedThea;
@@ -629,23 +637,10 @@ public class MainActivity extends AppCompatActivity {
 
             updateLaunchSquidwardRequestStatus();
 
-            blinkingIns = true;
-            buttonInsStateColor = Color.GREEN;
-
-            if (blinkingIns) {
-                buttonInsColor = (buttonInsColor == buttonInsStateColor) ? blinkingButtonGray : buttonInsStateColor;
-            } else {
-                buttonInsColor = buttonInsStateColor;
-            }
-
-            blinkingSat2 = true;
-            buttonSat2StateColor = Color.YELLOW;
-
-            if (blinkingIns) {
-                buttonSat2Color = (buttonSat2Color == buttonSat2StateColor) ? blinkingButtonGray : buttonSat2StateColor;
-            } else {
-                buttonInsColor = buttonSat2StateColor;
-            }
+            buttonInsPhase = buttonInsPhase ^ 1;
+            buttonInsStateColor[0] = blinkingButtonGreen;
+            buttonInsStateColor[1] = blinkingButtonAmber;
+            buttonInsColor = buttonInsStateColor[buttonInsPhase];
 
             final Runnable TODORunnable = new Runnable() {
                 @Override
@@ -716,15 +711,53 @@ public class MainActivity extends AppCompatActivity {
 
             final int insStatusStringColor;
             if (hardwareSelect == HardwareGroundTruth) {
-                if ((insStatus != null) && insStatus.equalsIgnoreCase("ins_solution_good")) {
-                    insStatusStringColor = Color.GREEN;
+                if (insStatus != null) {
+                    if (insStatus.equalsIgnoreCase("ins_solution_good")) {
+                        insStatusStringColor = Color.GREEN;
+                        buttonInsStateColor[0] = blinkingButtonGreen;
+                        buttonInsStateColor[1] = blinkingButtonGreen;
+                    } else if (insStatus.equalsIgnoreCase("ins_alignment_complete")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonGray;
+                        buttonInsStateColor[1] = blinkingButtonGreen;
+                    } else if (insStatus.equalsIgnoreCase("ins_high_variance")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonGray;
+                        buttonInsStateColor[1] = blinkingButtonAmber;
+                    } else if (insStatus.equalsIgnoreCase("ins_aligning")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonAmber;
+                        buttonInsStateColor[1] = blinkingButtonAmber;
+                    } else if (insStatus.equalsIgnoreCase("ins_solution_free")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonGreen;
+                        buttonInsStateColor[1] = blinkingButtonAmber;
+                    } else if (insStatus.equalsIgnoreCase("determining_orientation")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonRed;
+                        buttonInsStateColor[1] = blinkingButtonAmber;
+                    } else if (insStatus.equalsIgnoreCase("ins_inactive")) {
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonRed;
+                        buttonInsStateColor[1] = blinkingButtonRed;
+                    } else { /* error condition - blinking red */
+                        insStatusStringColor = Color.RED;
+                        buttonInsStateColor[0] = blinkingButtonGray;
+                        buttonInsStateColor[1] = blinkingButtonRed;
+                    }
                 } else {
                     insStatusStringColor = Color.RED;
+                    buttonInsStateColor[0] = blinkingButtonGray;
+                    buttonInsStateColor[1] = blinkingButtonGray;
                 }
             } else if (hardwareSelect == HardwareSensorBoard) {
                 insStatusStringColor = Color.GRAY;
+                buttonInsStateColor[0] = blinkingButtonGray;
+                buttonInsStateColor[1] = blinkingButtonGray;
             } else {
                 insStatusStringColor = Color.GRAY;
+                buttonInsStateColor[0] = blinkingButtonGray;
+                buttonInsStateColor[1] = blinkingButtonGray;
             }
 
             final String totalEventsString = String.format("%d", totalEvents);

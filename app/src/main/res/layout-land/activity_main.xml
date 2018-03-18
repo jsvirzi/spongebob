@@ -648,25 +648,25 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="300sp"
-                android:layout_height="300sp"
+                android:layout_width="@dimen/gpsimu_info_width"
+                android:layout_height="@dimen/gpsimu_info_height"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="120sp"
-                    android:layout_height="30sp"
+                    android:layout_width="@dimen/satellite_info_width"
+                    android:layout_height="@dimen/satellite_info_button_height"
                     android:orientation="horizontal">
 
                     <Button
-                        android:layout_width="50sp"
-                        android:layout_height="30sp"
+                        android:layout_width="@dimen/satellite_info_button_width"
+                        android:layout_height="@dimen/satellite_info_button_height"
                         android:text="INS"
                         android:id="@+id/dispInsStatus"
                         />
 
                     <Button
-                        android:layout_width="50sp"
-                        android:layout_height="30sp"
+                        android:layout_width="@dimen/satellite_info_button_width"
+                        android:layout_height="@dimen/satellite_info_button_height"
                         android:text="ALN"
                         android:id="@+id/dispAlnStatus"
                         />
@@ -674,25 +674,25 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="120sp"
-                    android:layout_height="60sp"
+                    android:layout_width="@dimen/satellite_info_width"
+                    android:layout_height="@dimen/satellite_info_height"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="120sp"
-                        android:layout_height="30sp"
+                        android:layout_width="@dimen/satellite_info_width"
+                        android:layout_height="@dimen/satellite_info_button_height"
                         android:orientation="horizontal">
 
                         <Button
-                            android:layout_width="50sp"
-                            android:layout_height="30sp"
+                            android:layout_width="@dimen/satellite_info_button_width"
+                            android:layout_height="@dimen/satellite_info_button_height"
                             android:text="SAT"
                             android:id="@+id/dispNumberSatellites1"
                             />
 
                         <Button
-                            android:layout_width="50sp"
-                            android:layout_height="30sp"
+                            android:layout_width="@dimen/satellite_info_button_width"
+                            android:layout_height="@dimen/satellite_info_button_height"
                             android:text="POS"
                             android:id="@+id/dispPosStatus1"
                             />
@@ -700,20 +700,20 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="120sp"
-                        android:layout_height="30sp"
+                        android:layout_width="@dimen/satellite_info_width"
+                        android:layout_height="@dimen/satellite_info_button_height"
                         android:orientation="horizontal">
 
                         <Button
-                            android:layout_width="50sp"
-                            android:layout_height="30sp"
+                            android:layout_width="@dimen/satellite_info_button_width"
+                            android:layout_height="@dimen/satellite_info_button_height"
                             android:text="SAT"
                             android:id="@+id/dispNumberSatellites2"
                             />
 
                         <Button
-                            android:layout_width="50sp"
-                            android:layout_height="30sp"
+                            android:layout_width="@dimen/satellite_info_button_width"
+                            android:layout_height="@dimen/satellite_info_button_height"
                             android:text="POS"
                             android:id="@+id/dispPosStatus2"
                             />

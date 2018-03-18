@@ -26,6 +26,14 @@
     <dimen name="control_button_width">100sp</dimen>
     <dimen name="control_button_height">40sp</dimen>
 
+    <dimen name="gpsimu_info_width">240sp</dimen>
+    <dimen name="gpsimu_info_height">80sp</dimen>
+
+    <dimen name="satellite_info_width">120sp</dimen>
+    <dimen name="satellite_info_height">80sp</dimen>
+    <dimen name="satellite_info_button_width">60sp</dimen>
+    <dimen name="satellite_info_button_height">40sp</dimen>
+
     <dimen name="button_group_text_height">30sp</dimen>
     <dimen name="button_group_height">70sp</dimen>
 
