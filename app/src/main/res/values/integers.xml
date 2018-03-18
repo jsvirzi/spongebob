@@ -1,7 +1,10 @@
 <resources>
-    <dimen name="info_field_width">375sp</dimen>
+    <dimen name="info_width">325sp</dimen>
+    <dimen name="info_height">600sp</dimen>
+
+    <dimen name="info_field_width">@dimen/info_width</dimen>
     <dimen name="info_field_height">35sp</dimen>
-    <dimen name="info_desc_field_width">200sp</dimen>
+    <dimen name="info_desc_field_width">150sp</dimen>
     <dimen name="info_text_field_width">175sp</dimen>
 
     <dimen name="gps_field_width">500sp</dimen>
@@ -17,6 +20,17 @@
     <dimen name="ins_status_field_width">125sp</dimen>
     <dimen name="ins_lat_field_width">175sp</dimen>
     <dimen name="ins_lon_field_width">175sp</dimen>
+
+    <dimen name="control_width">400sp</dimen>
+    <dimen name="control_height">400sp</dimen>
+    <dimen name="control_button_width">100sp</dimen>
+    <dimen name="control_button_height">40sp</dimen>
+
+    <dimen name="button_group_text_height">30sp</dimen>
+    <dimen name="button_group_height">70sp</dimen>
+
+    <dimen name="status_text_width">150sp</dimen>
+    <dimen name="status_desc_width">200sp</dimen>
 
     <dimen name="text_size">20sp</dimen>
 </resources>

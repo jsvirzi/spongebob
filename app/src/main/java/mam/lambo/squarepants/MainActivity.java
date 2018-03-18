@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
@@ -23,27 +24,14 @@ import android.widget.TextView;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import dataAcquisition.status.*; // OperationStatus;
+import dataAcquisition.*; // OperationStatus;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -133,19 +121,35 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBarSigmaLonCoarse;
 
     Button buttonLaunchThea;
+    int buttonLaunchTheaColor = Color.LTGRAY;
+
     Button buttonDisplayThea;
     Button buttonExitThea;
+
     Button buttonLaunchSquidward;
+    int buttonLaunchSquidwardColor = Color.LTGRAY;
+
     Button buttonExitSquidward;
+
     Button buttonIns;
+
     Button buttonAln;
+
     Button buttonSat1;
+
     Button buttonSat2;
+
     Button buttonPos1;
+
     Button buttonPos2;
 
-    Button buttonConnect;
-    boolean connected = false;
+    Button buttonConnectThea;
+    boolean connectedThea;
+    int buttonConnectTheaColor;
+
+    Button buttonConnectSquidward;
+    boolean connectedSquidward;
+    int buttonConnectSquidwardColor;
 
     RadioGroup radioGroupHardware;
     RadioButton radioButtonGroundTruth;
@@ -162,8 +166,14 @@ public class MainActivity extends AppCompatActivity {
 
     String theaIpAddress = "192.168.2.200";
     int theaPort = 8086;
-    String rocketLauncherIpAddress = "192.168.2.200";
+    int squidwardPort = 8086;
+    String squidwardIpAddress = "192.168.2.100";
     int rocketLauncherPort = 8087;
+
+    boolean launchTheaRequest = false;
+    boolean theaLaunched = false;
+    boolean launchSquidwardRequest = false;
+    boolean squidwardLaunched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,15 +233,18 @@ public class MainActivity extends AppCompatActivity {
         radioButtonGroundTruth = (RadioButton) findViewById(R.id.groundtruth);
         radioButtonSensorBoard = (RadioButton) findViewById(R.id.sensorboard);
 
-        buttonConnect = (Button) findViewById(R.id.connect);
-        buttonConnect.setOnClickListener(new View.OnClickListener() {
+        buttonConnectThea = (Button) findViewById(R.id.connectthea);
+        connectedThea = false;
+        buttonConnectTheaColor = Color.LTGRAY;
+        setButtonColor(buttonConnectThea, buttonLaunchTheaColor);
+        buttonConnectThea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         HttpClient httpClient = new DefaultHttpClient();
-                        String url = String.format("http://%s:%d/status?state=self", rocketLauncherIpAddress, rocketLauncherPort);
+                        String url = String.format("http://%s:%d/status?state=self", theaIpAddress, rocketLauncherPort);
                         HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
                         HttpResponse response = null;
                         try {
@@ -239,22 +252,49 @@ public class MainActivity extends AppCompatActivity {
                             HttpEntity entity = response.getEntity();
                             if (entity != null) {
                                 InputStream inputStream = entity.getContent();
-                                final Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        buttonConnect.setBackgroundColor(Color.GREEN);
-                                    }
-                                };
-                                MainActivity.this.runOnUiThread(runnable);
+                                if (inputStream.equals("running")) {
+                                    buttonConnectTheaColor = Color.GREEN;
+                                    setButtonColor(buttonConnectThea, buttonConnectTheaColor);
+                                }
                             }
                         } catch (Exception e) {
-                            final Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    buttonConnect.setBackgroundColor(Color.RED);
+                            buttonConnectTheaColor = Color.RED;
+                            setButtonColor(buttonConnectThea, buttonConnectTheaColor);
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
+
+        buttonConnectSquidward = (Button) findViewById(R.id.connectsquidward);
+        connectedSquidward = false;
+        buttonConnectSquidwardColor = Color.LTGRAY;
+        setButtonColor(buttonConnectSquidward, buttonLaunchSquidwardColor);
+        buttonConnectSquidward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        String url = String.format("http://%s:%d/status?state=self", squidwardIpAddress, rocketLauncherPort);
+                        HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+                                if (inputStream.equals("running")) {
+                                    buttonConnectSquidwardColor = Color.GREEN;
+                                    setButtonColor(buttonConnectSquidward, buttonConnectSquidwardColor);
                                 }
-                            };
-                            MainActivity.this.runOnUiThread(runnable);
+                            }
+                        } catch (Exception e) {
+                            buttonConnectSquidwardColor = Color.RED;
+                            setButtonColor(buttonConnectSquidward, buttonConnectSquidwardColor);
                             e.printStackTrace();
                         } finally {
                         }
@@ -266,7 +306,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (hardwareSelect == HardwareGroundTruth) {
             radioButtonGroundTruth.setChecked(true);
-            // radioButtonSensorBoard.setChecked(false);
         } else if (hardwareSelect == HardwareSensorBoard) {
             radioButtonSensorBoard.setChecked(true);
         } else { /* shouldn't be here */
@@ -312,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAln.startAnimation(mAnimation);
 
         buttonLaunchThea = (Button) findViewById(R.id.launchthea);
+        setButtonColor(buttonLaunchThea, buttonLaunchTheaColor);
         buttonLaunchThea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -319,12 +359,16 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         HttpClient httpClient = new DefaultHttpClient();
-                        String url = String.format("http://%s:%d/command?launch=thea", rocketLauncherIpAddress, rocketLauncherPort);
+                        String url = String.format("http://%s:%d/command?launch=thea", theaIpAddress, rocketLauncherPort);
                         if (radioButtonGroundTruth.isChecked()) {
                             url += "&hardware=groundtruth";
                         } else if (radioButtonSensorBoard.isChecked()) {
                             url += "&hardware=sensorboard";
                         }
+                        /* begin TODO */
+                        theaLaunched = false;
+                        launchTheaRequest = true;
+                        /* end TODO */
                         HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
                         HttpResponse response = null;
                         try {
@@ -332,6 +376,35 @@ public class MainActivity extends AppCompatActivity {
                             HttpEntity entity = response.getEntity();
                             if (entity != null) {
                                 InputStream inputStream = entity.getContent();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
+
+        buttonLaunchSquidward = (Button) findViewById(R.id.launchsquidward);
+        buttonLaunchSquidward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        String url = String.format("http://%s:%d/command?launch=squidward", squidwardIpAddress, rocketLauncherPort);
+                        HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+                                theaLaunched = false;
+                                launchTheaRequest = true;
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -372,17 +445,35 @@ public class MainActivity extends AppCompatActivity {
                             HttpEntity entity = response.getEntity();
                             if (entity != null) {
                                 InputStream inputStream = entity.getContent();
-//                        operationStatus = Status.OperationStatus.parseFrom(inputStream);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        } finally {
-//                    if (response != null) {
-//                        try {
-//                            response.();
-//                        } catch (IOException ex) {
-//                        }
-//                    }
+                        }
+                    }
+                };
+                handler.post(runnable);
+            }
+        });
+
+        buttonExitSquidward = (Button) findViewById(R.id.exitsquidward);
+        buttonExitSquidward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        HttpClient httpClient = new DefaultHttpClient();
+                        String url = String.format("http://%s:%d/command?action=terminate", squidwardIpAddress, theaPort);
+                        HttpPost httpPost = new HttpPost(url); /* goes directly to squidward */
+                        HttpResponse response = null;
+                        try {
+                            response = httpClient.execute(httpPost);
+                            HttpEntity entity = response.getEntity();
+                            if (entity != null) {
+                                InputStream inputStream = entity.getContent();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 };
@@ -394,7 +485,13 @@ public class MainActivity extends AppCompatActivity {
         progressBarSigmaLonCoarse.setProgress(100);
 
         httpClient = new DefaultHttpClient();
-        httpPost = new HttpPost("http://192.168.2.200:8086/status");
+//        httpPost = new HttpPost("http://192.168.2.200:8086/status");
+
+        buttonLaunchThea.setEnabled(false);
+        buttonLaunchSquidward.setEnabled(false);
+        buttonExitThea.setEnabled(false);
+        buttonExitSquidward.setEnabled(false);
+        buttonDisplayThea.setEnabled(false);
 
         /* this must be last item as it uses all resources */
         heartBeat = new HeartBeat();
@@ -440,48 +537,100 @@ public class MainActivity extends AppCompatActivity {
         textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
+    private void setButtonColor(final Button button, final int color) {
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                button.setBackgroundColor(color);
+            }
+        };
+        MainActivity.this.runOnUiThread(runnable);
+    }
+
+    private void updateLaunchTheaRequestStatus() {
+        if ((launchTheaRequest == true) && (theaLaunched == false)) {
+            HttpClient httpClient = new DefaultHttpClient();
+            String url = String.format("http://%s:%d/status?state=self", theaIpAddress, theaPort);
+            HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
+            HttpResponse response = null;
+            try {
+                response = httpClient.execute(httpPost);
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    InputStream inputStream = entity.getContent();
+                    if (inputStream.equals("running")) {
+                        launchTheaRequest = false;
+                        theaLaunched = true;
+                        buttonLaunchTheaColor = Color.GREEN;
+                        setButtonColor(buttonLaunchThea, buttonLaunchTheaColor);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                buttonLaunchTheaColor = (buttonLaunchTheaColor == Color.LTGRAY) ? Color.RED : Color.LTGRAY;
+                setButtonColor(buttonLaunchThea, buttonLaunchTheaColor);
+            }
+        }
+    }
+
+    private void updateLaunchSquidwardRequestStatus() {
+        if ((launchSquidwardRequest == true) && (squidwardLaunched == false)) {
+            HttpClient httpClient = new DefaultHttpClient();
+            String url = String.format("http://%s:%d/status?state=self", squidwardIpAddress, theaPort);
+            HttpPost httpPost = new HttpPost(url); /* goes to rocket launcher */
+            HttpResponse response = null;
+            try {
+                response = httpClient.execute(httpPost);
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    InputStream inputStream = entity.getContent();
+                    if (inputStream.equals("running")) {
+                        launchSquidwardRequest = false;
+                        squidwardLaunched = true;
+                        buttonLaunchSquidwardColor = Color.GREEN;
+                        setButtonColor(buttonLaunchSquidward, buttonLaunchSquidwardColor);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                buttonLaunchSquidwardColor = (buttonLaunchSquidwardColor == Color.LTGRAY) ? Color.RED : Color.LTGRAY;
+                setButtonColor(buttonLaunchSquidward, buttonLaunchSquidwardColor);
+            }
+        }
+    }
+
+    private Status.OperationStatus updateTheaStatus() {
+        Status.OperationStatus operationStatus = null;
+        if (displayThea == true) {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost("http://192.168.2.200:8086/status");
+            HttpResponse response;
+            try {
+                response = httpClient.execute(httpPost);
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    InputStream inputStream = entity.getContent();
+                    operationStatus = Status.OperationStatus.parseFrom(inputStream);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return operationStatus;
+    }
+
     private class HeartBeat extends TimerTask {
         public void run() {
 
+            updateLaunchTheaRequestStatus();
+
+            updateLaunchSquidwardRequestStatus();
+
             if (displayThea == false) { return; }
 
-            Status.OperationStatus operationStatus = null;
-
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://192.168.2.200:8086/status");
-
-            if (true) {
-                // CloseableHttpClient httpClient = HttpClients.createDefault();
-
-//                List<NameValuePair> params = new ArrayList<NameValuePair>();
-//                params.add(new BasicNameValuePair("username", "John"));
-//                params.add(new BasicNameValuePair("password", "pass"));
-//                try {
-//                    httpPost.setEntity(new UrlEncodedFormEntity(params));
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-                // httpPost = new HttpPost("http://abcya.com");
-                // CloseableHttpResponse response = null;
-                HttpResponse response;
-                try {
-                    response = httpClient.execute(httpPost);
-                    HttpEntity entity = response.getEntity();
-                    if (entity != null) {
-                        InputStream inputStream = entity.getContent();
-                        operationStatus = Status.OperationStatus.parseFrom(inputStream);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-//                if (response != null) {
-//                    try {
-//                        response.close();
-//                    } catch (IOException ex) {
-//                    }
-//                }
-                }
-            }
+            Status.OperationStatus operationStatus = updateTheaStatus();
 
             if (operationStatus != null) {
                 lidarEventCount = operationStatus.getLidarCount();

@@ -22,8 +22,241 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="600sp"
-            android:layout_height="600sp"
+            android:layout_width="@dimen/control_width"
+            android:layout_height="@dimen/control_height"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="@dimen/control_width"
+                android:layout_height="@dimen/control_button_height">
+
+                <RadioGroup
+                    android:layout_width="300sp"
+                    android:layout_height="40sp"
+                    android:id="@+id/hardware"
+                    android:checkedButton="@id/groundtruth"
+                    android:orientation="horizontal"
+                    >
+
+                    <RadioButton
+                        android:layout_width="150sp"
+                        android:layout_height="40sp"
+                        android:id="@+id/groundtruth"
+                        android:text="GROUND TRUTH"
+                        />
+
+                    <RadioButton
+                        android:layout_width="150sp"
+                        android:layout_height="40sp"
+                        android:id="@+id/sensorboard"
+                        android:text="SENSOR BOARD"
+                        />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_group_height"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30sp"
+                    android:text="POWER"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50sp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/gpspower"
+                        android:text="GPS"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/camerapower"
+                        android:text="CAMERA"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/lidarpower"
+                        android:text="LIDAR"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_group_height"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30sp"
+                    android:text="THEA"
+                    />
+
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40sp"
+                android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/connectthea"
+                        android:text="CONNECT"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/launchthea"
+                        android:text="LAUNCH"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/exitthea"
+                        android:text="STOP"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/displaythea"
+                        android:text="DISPLAY"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_group_height"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30sp"
+                    android:text="SQUIDWARD"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/control_button_height"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/connectsquidward"
+                        android:text="CONNECT"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/launchsquidward"
+                        android:text="LAUNCH"
+                        />
+
+                    <Button
+                        android:layout_width="@dimen/control_button_width"
+                        android:layout_height="@dimen/control_button_height"
+                        android:id="@+id/exitsquidward"
+                        android:text="STOP"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/gps_field_height">
+
+                <TextView
+                    android:layout_width="50sp"
+                    android:layout_height="@dimen/gps_field_height"
+                    android:id="@+id/textgpsstat"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="GPS"
+                    />
+
+                <TextView
+                    android:layout_width="@dimen/gps_lat_field_width"
+                    android:layout_height="@dimen/gps_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="-000.00000000"
+                    android:id="@+id/gpslat"
+                    />
+
+                <TextView
+                    android:layout_width="@dimen/gps_lon_field_width"
+                    android:layout_height="@dimen/gps_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="-000.00000000"
+                    android:id="@+id/gpslon"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ins_field_height">
+
+                <TextView
+                    android:layout_width="50sp"
+                    android:layout_height="@dimen/ins_field_height"
+                    android:id="@+id/textinsstat"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="INS"
+                    />
+
+                <TextView
+                    android:layout_width="@dimen/ins_lat_field_width"
+                    android:layout_height="@dimen/ins_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="-000.00000000"
+                    android:id="@+id/inslat"
+                    />
+
+                <TextView
+                    android:layout_width="@dimen/ins_lon_field_width"
+                    android:layout_height="@dimen/ins_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="-000.00000000"
+                    android:id="@+id/inslon"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/info_width"
+            android:layout_height="@dimen/info_height"
             android:orientation="vertical">
 
             <LinearLayout
@@ -182,88 +415,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="@dimen/gps_field_width"
-                android:layout_height="@dimen/gps_field_height">
-
-                <TextView
-                    android:layout_width="@dimen/gps_desc_field_width"
-                    android:layout_height="@dimen/gps_field_height"
-                    android:id="@+id/textgpsstat"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="GPS POS"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/gps_status_field_width"
-                    android:layout_height="@dimen/gps_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:id="@+id/gpsstat"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/gps_lat_field_width"
-                    android:layout_height="@dimen/gps_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="-000.00000000"
-                    android:id="@+id/gpslat"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/gps_lon_field_width"
-                    android:layout_height="@dimen/gps_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="-000.00000000"
-                    android:id="@+id/gpslon"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="@dimen/ins_field_width"
-                android:layout_height="@dimen/ins_field_height">
-
-                <TextView
-                    android:layout_width="@dimen/ins_desc_field_width"
-                    android:layout_height="@dimen/ins_field_height"
-                    android:id="@+id/textinsstat"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="INS POS"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/ins_status_field_width"
-                    android:layout_height="@dimen/ins_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:id="@+id/insstat"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/ins_lat_field_width"
-                    android:layout_height="@dimen/ins_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="-000.00000000"
-                    android:id="@+id/inslat"
-                    />
-
-                <TextView
-                    android:layout_width="@dimen/ins_lon_field_width"
-                    android:layout_height="@dimen/ins_field_height"
-                    android:fontFamily="serif-monospace"
-                    android:textSize="@dimen/text_size"
-                    android:text="-000.00000000"
-                    android:id="@+id/inslon"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="@dimen/info_field_width"
                 android:layout_height="@dimen/info_field_height">
 
@@ -355,116 +506,45 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="350sp"
-                android:layout_height="50sp"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/gps_field_height">
 
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/gpspower"
-                    android:text="GPS"
+                <TextView
+                    android:layout_width="@dimen/info_desc_field_width"
+                    android:layout_height="@dimen/gps_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="GPS STATUS"
                     />
 
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/camerapower"
-                    android:text="CAMERA"
-                    />
-
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/lidarpower"
-                    android:text="LIDAR"
+                <TextView
+                    android:layout_width="@dimen/info_text_field_width"
+                    android:layout_height="@dimen/gps_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:id="@+id/gpsstat"
                     />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="400sp"
-                android:layout_height="40sp"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ins_field_height">
 
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/connect"
-                    android:text="CONNECT"
+                <TextView
+                    android:layout_width="@dimen/info_desc_field_width"
+                    android:layout_height="@dimen/ins_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:text="INS STATUS"
                     />
 
-                <RadioGroup
-                    android:layout_width="300sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/hardware"
-                    android:checkedButton="@id/groundtruth"
-                    android:orientation="horizontal"
-                    >
-
-                    <RadioButton
-                        android:layout_width="150sp"
-                        android:layout_height="40sp"
-                        android:id="@+id/groundtruth"
-                        android:text="GROUND TRUTH"
-                        />
-
-                    <RadioButton
-                        android:layout_width="150sp"
-                        android:layout_height="40sp"
-                        android:id="@+id/sensorboard"
-                        android:text="SENSOR BOARD"
-                        />
-
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="400sp"
-                android:layout_height="40sp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="150sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/launchthea"
-                    android:text="LAUNCH THEA"
-                    />
-
-                <Button
-                    android:layout_width="100sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/displaythea"
-                    android:text="DISPLAY"
-                    />
-
-                <Button
-                    android:layout_width="150sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/exitthea"
-                    android:text="EXIT THEA"
-                    />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="300sp"
-                android:layout_height="40sp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:layout_width="150sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/launchsquidward"
-                    android:text="LAUNCH SW"
-                    />
-
-                <Button
-                    android:layout_width="150sp"
-                    android:layout_height="40sp"
-                    android:id="@+id/exitsquidward"
-                    android:text="EXIT SW"
+                <TextView
+                    android:layout_width="@dimen/info_text_field_width"
+                    android:layout_height="@dimen/ins_field_height"
+                    android:fontFamily="serif-monospace"
+                    android:textSize="@dimen/text_size"
+                    android:id="@+id/insstat"
                     />
 
             </LinearLayout>
